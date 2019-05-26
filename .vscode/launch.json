@@ -3,6 +3,7 @@
         {
             "type": "java",
             "name": "CodeLens (Launch) - Main",
+            "args": "test.mat",
             "request": "launch",
             "mainClass": "de.laurenzgrote.rwth.kdtrees.Main",
             "projectName": "data-preprocessing-code"
