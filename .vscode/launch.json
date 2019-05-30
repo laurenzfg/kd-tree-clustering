@@ -2,8 +2,8 @@
     "configurations": [
         {
             "type": "java",
-            "name": "CodeLens (Launch) - Main",
-            "args": "test.mat",
+            "name": "Specified Input",
+            "args": "${command:SpecifyProgramArgs}",
             "request": "launch",
             "mainClass": "de.laurenzgrote.rwth.kdtrees.Main",
             "projectName": "data-preprocessing-code"
