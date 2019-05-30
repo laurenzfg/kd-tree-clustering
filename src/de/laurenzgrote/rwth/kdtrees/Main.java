@@ -17,7 +17,7 @@ public class Main {
         DataSet dSet;
         try {
             dSet = DataSetFactory.dataSetFromDenseMatrix(path);
-            System.out.println(dSet.avg(2));
+            System.out.println(dSet.avg(0));
         } catch (FileMalformattedException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
