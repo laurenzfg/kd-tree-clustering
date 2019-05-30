@@ -30,8 +30,15 @@ public class DataPoint {
     /**
      * @return the data
      */
-    public double[] getData() {
-        return data;
+    public double getData(int feature) {
+        return data[feature];
+    }
+    
+    /**
+     * @return dimension of the data point
+     */
+    public int getDim() {
+        return data.length;
     }
 
     @Override

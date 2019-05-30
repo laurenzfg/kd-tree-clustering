@@ -3,6 +3,7 @@ package de.laurenzgrote.rwth.kdtrees.io;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import de.laurenzgrote.rwth.kdtrees.data.DataPoint;
@@ -36,7 +37,7 @@ public abstract class DataSetFactory {
             throw new FileMalformattedException(path, "First line must contain n+1 lines");
 
         // READING STARTS HERE
-        DataSet dSet = new DataSet(row_cnt, column_cnt);
+        ArrayList<DataPoint> dSet = new ArrayList<>(row_cnt);
         for (int i = 0; i < row_cnt; i++) {
             // We read all the rows
             // let i be the row, then i lays in the i+1th line
@@ -44,7 +45,6 @@ public abstract class DataSetFactory {
             String[] line = rows.get(i + 1).split(" ");
             if (line.length != column_cnt)
                 throw new FileMalformattedException(path, "Row " + i + " has wrong dimension");
-
             try {
                 double[] vector = new double[line.length];
                 for (int j = 0; j < column_cnt; j++) {
@@ -58,6 +58,6 @@ public abstract class DataSetFactory {
                 throw new FileMalformattedException(path, "Row " + i + ": " + e.getMessage());
             }
         }
-        return dSet;
+        return new DataSet(dSet);
     }
 }
