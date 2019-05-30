@@ -17,7 +17,15 @@ public class Main {
         DataSet dSet;
         try {
             dSet = DataSetFactory.dataSetFromDenseMatrix(path);
-            System.out.println(dSet.avg(0));
+            for (int i = 0; i < dSet.getDim(); i++) {
+                double avg = dSet.getAvg(i);
+                double mean = dSet.getMean(i);
+                double variance = dSet.getVariance(i);
+                double stddev = dSet.getStddev(i);
+                System.out.print("Feature " + i + ": ");
+                System.out.println("Mean: " + mean + " Average: " + avg + 
+                    " Variance: " + variance + " Stddev: " + stddev);
+            }
         } catch (FileMalformattedException | IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

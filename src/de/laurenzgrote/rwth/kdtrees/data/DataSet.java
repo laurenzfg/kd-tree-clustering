@@ -8,6 +8,7 @@ import java.util.ArrayList;
  */
 public class DataSet {
     private int dim;
+    private int length;
     private ArrayList<DataPoint>[] set;
 
     /**
@@ -16,13 +17,19 @@ public class DataSet {
      * @param set List of points constituing the data set (unsorted)
      */
     public DataSet (ArrayList<DataPoint> set) {
-        dim = set.get(0).getDim();
+        this.dim = set.get(0).getDim();
+        this.length = set.size();
         this.set = new ArrayList[dim];
         this.set[0] = set;
 
         sort();
     }
 
+    /**
+     * Sorts all the array fields
+     * Result: The nth element of the set contains all the dps sorted
+     * with respect to the nth feature
+     */
     private void sort () {
         // Now we sort all the arrays
         for (int cDim = 0; cDim < dim; cDim++) {
@@ -36,13 +43,53 @@ public class DataSet {
         }
     }
 
-    public double avg (int feature) {
+    /**
+     * @param feature Feature currently looked at
+     * @return Average value in the set of the feature
+     */
+    public double getAvg (int feature) {
         double avg = 0.0;
         for (DataPoint d : set[0]) {
             avg += d.getData(feature);
         }
-        avg /= (double) set[0].size();
+        avg /= (double) length;
         return avg;
+    }
+
+    /**
+     * @param feature Feature currently looked at
+     * @return Median value in the set of the feature
+     */
+    public double getMean (int feature) {
+        // Arrays are sourted
+        int mid = set[0].size() / 2;
+        return set[feature].get(mid).getData(feature);
+    }
+    
+    /**
+     * @param feature Feature currently looked at
+     * @return variance of the given feature
+     * Formula: https://doi.org/10.1002/0471667196.ess2516.pub2
+     * (but no root since we look for variance not stddev)
+     */
+    public double getVariance (int feature) {
+        double avg = getAvg(feature);
+        double variance = 0.0;
+        for (int i = 0; i < dim; i++) {
+            double val = set[feature].get(i).getData(feature);
+            variance += Math.pow(val - avg,2);
+        }
+        variance /= (double) (length - 1);
+        return variance;
+    }
+
+    /**
+     * @param feature Feature currently looked at
+     * @return stdev of the given feature
+     */
+    public double getStddev (int feature) {
+        double variance = getVariance(feature);
+        return Math.sqrt(variance);
     }
 
     /**
