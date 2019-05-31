@@ -12,24 +12,36 @@ public class DataSet {
     private ArrayList<DataPoint>[] set;
 
     /**
-     * Initialises a set of Data Points (e.g. from input).
-     * Set can not be altered.
+     * Initialises a set of Data Points (e.g. from input). Set can not be altered.
+     * 
      * @param set List of points constituing the data set (unsorted)
+     * @throws DataPointMalformatException
      */
-    public DataSet (ArrayList<DataPoint> set) {
+    public DataSet(ArrayList<DataPoint> set) throws DataPointMalformatException {
         this.dim = set.get(0).getDim();
         this.length = set.size();
         this.set = new ArrayList[dim];
         this.set[0] = set;
-
+        isSane();
         sort();
     }
 
     /**
-     * Sorts all the array fields
-     * Result: The nth element of the set contains all the dps sorted
-     * with respect to the nth feature
+     * Checks if all data points have the same dimension
+     * 
+     * @throws DataPointMalformatException
      */
+    private void isSane() throws DataPointMalformatException {
+        for (DataPoint dPoint : this.set[0])
+            if (dPoint.getDim() != dim)
+                throw new DataPointMalformatException("Data Point has wrong dimension", dPoint);
+    }
+
+    /** 
+    * Sorts all the array fields
+    * Result: The nth element of the set contains all the dps sorted
+    * with respect to the nth feature
+    */
     private void sort () {
         // Now we sort all the arrays
         for (int cDim = 0; cDim < dim; cDim++) {
