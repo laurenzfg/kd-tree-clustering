@@ -21,6 +21,7 @@ public abstract class ClusterWriter {
         // since these contain the clusters
         // We get them by DFS using recursion
         ArrayList<TreeNode> leafs = getLeafs(tNode);
+        System.out.println("Cluster count: " + leafs.size());
 
         // Now we do the output
         for (int i = 0; i < leafs.size(); i++) {
