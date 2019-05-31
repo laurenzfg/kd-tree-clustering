@@ -1,6 +1,6 @@
 package de.laurenzgrote.rwth.kdtrees.data;
 
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * ImmutableDataSet. Set of data points of the same dimension.
@@ -24,6 +24,22 @@ public class DataSet {
         this.set[0] = set;
         isSane();
         sort();
+    }
+
+    /**
+     * Creates a subset
+     * The DataSet is assumed is assumed to be sane and sorted, thus proteced
+     * @param ds     Original Dataset
+     * @param remove Datapoints to be removed
+     */
+    protected DataSet (DataSet ds, List<DataPoint> remove) {
+        this.dim = ds.getDim();
+        this.set = new ArrayList[ds.getLength()];
+        for (int i = 0; i < dim; i++) {
+            this.set[i] = new ArrayList<>(ds.set[i]);
+            this.set[i].removeAll(remove);
+        }
+        this.length = this.set[0].size();
     }
 
     /**
@@ -105,9 +121,23 @@ public class DataSet {
     }
 
     /**
+     * @return All sorted sets
+     */
+    public ArrayList<DataPoint>[] getSet () {
+        return set;
+    }
+
+    /**
      * @return Dimension of the IDS
      */
     public int getDim() {
         return dim;
+    }
+
+    /**
+     * @return length of current data set
+     */
+    public int getLength() {
+        return length;
     }
 }
