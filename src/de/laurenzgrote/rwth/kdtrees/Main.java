@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
         Path path = Paths.get(args[0]);
         try {
-            KDTreeNode dSet = new KDTreeNode(DataSetFactory.readFromDenseMatrix(path), 0.1, 0.000065);
+            KDTreeNode dSet = new KDTreeNode(DataSetFactory.readFromDenseMatrix(path), 0.001, 0.0001);
             for (int i = 0; i < dSet.getDim(); i++) {
                 double avg = dSet.getAvg(i);
                 double mean = dSet.getMean(i);
@@ -27,8 +27,8 @@ public class Main {
                 System.out.print("Feature " + i + ": ");
                 System.out.println(
                         "Mean: " + mean + " Average: " + avg + " Variance: " + variance + " Stddev: " + stddev);
-                ClusterWriter.writeToGnuplot(dSet, Paths.get("out.dat"));
             }
+            ClusterWriter.writeToGnuplot(dSet, Paths.get("out.dat"));
         } catch (FileMalformattedException | IOException | DataPointMalformatException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
