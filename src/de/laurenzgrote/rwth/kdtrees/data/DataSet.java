@@ -34,7 +34,7 @@ public class DataSet {
      */
     protected DataSet (DataSet ds, List<DataPoint> remove) {
         this.dim = ds.getDim();
-        this.set = new ArrayList[ds.getLength()];
+        this.set = new ArrayList[dim];
         for (int i = 0; i < dim; i++) {
             this.set[i] = new ArrayList<>(ds.set[i]);
             this.set[i].removeAll(remove);
