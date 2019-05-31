@@ -69,7 +69,8 @@ public class KDTreeNode extends DataSet implements TreeNode{
             }
         }
         // Can a split be performed
-        if (maxDiff > tresh_maxdiff) {
+        // Criteria A: greater than tresh; Criteria B: clusters will be large enough
+        if (maxDiff > tresh_maxdiff && pivot >= minclustersize && getLength() - pivot >= minclustersize) {
             // Yes --> Split by pivot
             splitByPivot(maxDiffFeature, pivot);
             return true;
