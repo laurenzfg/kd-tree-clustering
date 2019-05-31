@@ -3,37 +3,43 @@ package de.laurenzgrote.rwth.kdtrees.io;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.List;
 
 import de.laurenzgrote.rwth.kdtrees.data.DataPoint;
 import de.laurenzgrote.rwth.kdtrees.data.TreeNode;
 
 /**
- * ClusterWriter
+ * ClusterWriter. Writes clustering data to various output formats
  */
 public abstract class ClusterWriter {
 
+    /**
+     * Writes clustering data to gnuplot compatible data
+     * @param tNode Root node
+     * @param path Output path
+     */
     public static void writeToGnuplot(TreeNode tNode, Path path){
-        StringBuilder outString = new StringBuilder();
+        StringBuilder outString = new StringBuilder(); // Output buffer
 
         // First we make an ArrayList of just the leaf nodes
         // since these contain the clusters
         // We get them by DFS using recursion
-        ArrayList<TreeNode> leafs = getLeafs(tNode);
+        List<TreeNode> leafs = getLeafs(tNode);
         System.out.println("Cluster count: " + leafs.size());
 
         // Now we do the output
         for (int i = 0; i < leafs.size(); i++) {
-            ArrayList<DataPoint> leaf = leafs.get(i).getData();
+            // FOR every leaf
+            List<DataPoint> leaf = leafs.get(i).getDataPoints();
             for (DataPoint dPoint : leaf) {
                 outString.append(dPoint); // toString() of dPoint
-                outString.append(i);
+                outString.append(i); // Clustering info
                 outString.append('\n');
             }
         }
 
-        // File I/O
+        // File I/O (Writing with New IO)
         try {
         // if present, overwrite
             if (Files.exists(path))
@@ -46,18 +52,25 @@ public abstract class ClusterWriter {
         // Since Java new I/O is new, fresh and hipster, I do not need to close file
     }
 
-    private static ArrayList<TreeNode> getLeafs(TreeNode tNode) {
-        ArrayList<TreeNode> leafs = new ArrayList<>();;
+    /**
+     * DFS which extracts leaf nodes from binary tree
+     */
+    private static List<TreeNode> getLeafs(TreeNode tNode) {
+        // Assumption: Tree is either leaf or has two children
+        List<TreeNode> leafs = new ArrayList<>();
         if (tNode.getLeft() == null && tNode.getRight() == null) {
+            // Leaf node
             leafs.add(tNode);
         } else if (tNode.getLeft() != null && tNode.getRight() != null) {
+            // Two children
             leafs.addAll(getLeafs(tNode.getLeft()));
             leafs.addAll(getLeafs(tNode.getRight()));
         } else {
+            // One child
             System.err.println("Unspecified condition: TreeNode with one child");
             // Since that case MUST NOT HAPPEN BY DESIGN
             // we dont't do exception handling, we just quit.
-            // Stil better than an NPE :D
+            // Still better than an NPE :D
             System.exit(-1);
         }
         return leafs;

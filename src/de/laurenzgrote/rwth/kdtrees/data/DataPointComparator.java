@@ -3,7 +3,7 @@ package de.laurenzgrote.rwth.kdtrees.data;
 import java.util.Comparator;
 
 /**
- * DataPointComparator. Compares to data point according to then nth dimension
+ * DataPointComparator. Compares to data point according to the nth dimension
  */
 public class DataPointComparator implements Comparator<DataPoint> {
 

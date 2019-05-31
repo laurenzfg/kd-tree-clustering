@@ -3,17 +3,18 @@ package de.laurenzgrote.rwth.kdtrees.data;
 /**
  * DatapointNotNormalizedException
  */
-public class DataPointMalformatException extends Exception {
+public class DataPointMalformattedException extends Exception {
 
+    private static final long serialVersionUID = 1L;
     DataPoint faultyDatapoint;
 
-    public DataPointMalformatException(String clue, DataPoint faultyDatapoint) {
+    public DataPointMalformattedException(String clue, DataPoint faultyDatapoint) {
         super(clue);
         this.faultyDatapoint = faultyDatapoint;
     }
 
     /**
-     * @return the faultyDatapoint
+     * @return The faulty datapoint
      */
     public DataPoint getFaultyDatapoint() {
         return faultyDatapoint;

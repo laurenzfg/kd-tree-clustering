@@ -3,32 +3,35 @@ package de.laurenzgrote.rwth.kdtrees.data;
 import java.util.*;
 
 /**
- * ImmutableDataSet. Set of data points of the same dimension.
+ * DataSet. Immutable set of data points of the same dimension.
  * The List of Pointers is ordered by the nth dimension.
  */
 public class DataSet {
     private int dim;
     private int length;
-    private ArrayList<DataPoint>[] set;
+    private List<DataPoint>[] set;
 
     /**
      * Initialises a set of Data Points (e.g. from input). Set can not be altered.
-     * 
+     * Set is sorted against all features upon initialization
      * @param set List of points constituing the data set (unsorted)
-     * @throws DataPointMalformatException
+     * @throws DataPointMalformatException if DataPoints are not sane
      */
-    public DataSet(ArrayList<DataPoint> set) throws DataPointMalformatException {
-        this.dim = set.get(0).getDim();
+    public DataSet(List<DataPoint> set) throws DataPointMalformattedException {
         this.length = set.size();
+        this.dim = set.get(0).getDim();
+        // All DPs must have same dim
+        for (DataPoint dPoint : set)
+            if (dPoint.getDim() != dim)
+                throw new DataPointMalformattedException("Data Point has wrong dimension", dPoint);
         this.set = new ArrayList[dim];
-        this.set[0] = set;
-        isSane();
-        sort();
+        this.set[0] = set; // Save to first position
+        sort(); // Sort and copy
     }
 
     /**
-     * Creates a subset
-     * The DataSet is assumed is assumed to be sane and sorted, thus proteced
+     * Creates a subset from the given set.
+     * The DataSet is assumed is assumed to be complete and sorted, thus a proteced method
      * @param ds     Original Dataset
      * @param remove Datapoints to be removed
      */
@@ -36,38 +39,28 @@ public class DataSet {
         this.dim = ds.getDim();
         this.set = new ArrayList[dim];
         for (int i = 0; i < dim; i++) {
-            this.set[i] = new ArrayList<>(ds.set[i]);
-            this.set[i].removeAll(remove);
+            this.set[i] = new ArrayList<>(ds.set[i]); // Copy value
+            this.set[i].removeAll(remove); // Remove items to be removed
         }
         this.length = this.set[0].size();
     }
 
-    /**
-     * Checks if all data points have the same dimension
-     * 
-     * @throws DataPointMalformatException
-     */
-    private void isSane() throws DataPointMalformatException {
-        for (DataPoint dPoint : this.set[0])
-            if (dPoint.getDim() != dim)
-                throw new DataPointMalformatException("Data Point has wrong dimension", dPoint);
-    }
-
     /** 
-    * Sorts all the array fields
-    * Result: The nth element of the set contains all the dps sorted
+    * Creates sorted lists for each feature.
+    * Result: The nth element of the list contains all the dps sorted
     * with respect to the nth feature
     */
     private void sort () {
         // Now we sort all the arrays
         for (int cDim = 0; cDim < dim; cDim++) {
+            // Comperator for the nth feature
             DataPointComparator dPointComparator = new DataPointComparator(cDim);
-            if (cDim > 0) {
+            if (cDim > 0) { // first is already present
                 // Copy the data
-                set[cDim] = new ArrayList<>(set[cDim-1]);
+                set[cDim] = new ArrayList<>(set[cDim-1]); // Copy constructor
             }
             // Sort by dim
-            set[cDim].sort(dPointComparator);
+            set[cDim].sort(dPointComparator); // Quicksort
         }
     }
 
@@ -121,25 +114,30 @@ public class DataSet {
     }
 
     /**
-     * @return All sorted sets
+     * @return Lists with the dps ordered by the nth feature
      */
-    public ArrayList<DataPoint>[] getSet () {
+    protected List<DataPoint>[] getSet () {
         return set;
     }
 
-    public ArrayList<DataPoint> getData() {
+    /**
+     * @return DataPoints contained in the set
+     */
+    public List<DataPoint> getDataPoints() {
+        // All the lists contain the same data
+        // so we can select one randomly
         return set[0];
     }
 
     /**
-     * @return Dimension of the IDS
+     * @return Dimension of the every data point
      */
     public int getDim() {
         return dim;
     }
 
     /**
-     * @return length of current data set
+     * @return number of vectors in the data set
      */
     public int getLength() {
         return length;

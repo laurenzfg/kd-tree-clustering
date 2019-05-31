@@ -13,7 +13,7 @@ public class DataPoint {
      * Constructs a datapoint
      * @param data data vector
      */
-    public DataPoint (double[] data) throws DataPointMalformatException {
+    public DataPoint (double[] data) throws DataPointMalformattedException {
         this.data = data;
         isSane();
     }
@@ -21,14 +21,14 @@ public class DataPoint {
     /**
      * Checks if data is normalized
      */
-    private void isSane() throws DataPointMalformatException {
+    private void isSane() throws DataPointMalformattedException {
         for (double d : data)
             if (d < 0.0 || d > 1.0)
-                throw new DataPointMalformatException("Data point not normalized", this);
+                throw new DataPointMalformattedException("Data point not normalized", this);
     }
 
     /**
-     * @return the data
+     * @return nth entry of vector
      */
     public double getData(int feature) {
         return data[feature];
