@@ -16,14 +16,14 @@ import de.laurenzgrote.rwth.kdtrees.data.DataSet;
 public abstract class DataSetFactory {
 
     /**
-     * Reads a dense matrix from a file. Syntax as in CLUTO. 1st line: row_count
-     * column_count
+     * Reads a dense matrix from a file. Syntax as in CLUTO.
+     * 1st line: row_count column_count
      * 
      * @param path File to read from
      * @return Matrix as specified in File
      * @throws IOException
      */
-    public static DataSet dataSetFromDenseMatrix(Path path) throws FileMalformattedException, IOException {
+    public static ArrayList<DataPoint> readFromDenseMatrix(Path path) throws FileMalformattedException, IOException {
         int row_cnt, column_cnt;
         List<String> rows = Files.readAllLines(path); // UTF-8 is assumed
         try {
@@ -58,6 +58,6 @@ public abstract class DataSetFactory {
                 throw new FileMalformattedException(path, "Row " + i + ": " + e.getMessage());
             }
         }
-        return new DataSet(dSet);
+        return dSet;
     }
 }
