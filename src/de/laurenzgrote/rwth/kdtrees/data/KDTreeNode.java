@@ -55,7 +55,6 @@ public class KDTreeNode extends DataSet {
             left = new KDTreeNode(this, geq, tresh_maxdiff, tresh_variance);
             // Right is geq
             right = new KDTreeNode(this, le, tresh_maxdiff, tresh_variance);
-            System.out.println("M");
         }
         // ELSE: Found no splitting dimension. Node is left as is
     }

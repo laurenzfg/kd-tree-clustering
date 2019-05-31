@@ -90,7 +90,7 @@ public class DataSet {
      */
     public double getMean (int feature) {
         // Arrays are sourted
-        int mid = set[0].size() / 2;
+        int mid = length / 2;
         return set[feature].get(mid).getData(feature);
     }
     
