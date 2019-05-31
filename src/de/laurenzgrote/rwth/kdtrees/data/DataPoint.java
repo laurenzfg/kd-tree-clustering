@@ -53,7 +53,6 @@ public class DataPoint {
             sBuilder.append(d);
             sBuilder.append(' ');
         }
-        sBuilder.append('\n');
         return sBuilder.toString();
     }
 }

@@ -127,6 +127,10 @@ public class DataSet {
         return set;
     }
 
+    public ArrayList<DataPoint> getData() {
+        return set[0];
+    }
+
     /**
      * @return Dimension of the IDS
      */

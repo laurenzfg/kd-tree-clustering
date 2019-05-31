@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * KDTreeNode
  */
-public class KDTreeNode extends DataSet {
+public class KDTreeNode extends DataSet implements TreeNode{
     private double tresh_maxdiff, tresh_variance;
     private KDTreeNode left, right;
 
