@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import de.laurenzgrote.rwth.kdtrees.data.DataPoint;
 import de.laurenzgrote.rwth.kdtrees.data.TreeNode;
@@ -31,7 +32,7 @@ public abstract class ClusterWriter {
         // Now we do the output
         for (int i = 0; i < leafs.size(); i++) {
             // FOR every leaf
-            List<DataPoint> leaf = leafs.get(i).getDataPoints();
+            Set<DataPoint> leaf = leafs.get(i).getSet();
             for (DataPoint dPoint : leaf) {
                 outString.append(dPoint); // toString() of dPoint
                 outString.append(i); // Clustering info

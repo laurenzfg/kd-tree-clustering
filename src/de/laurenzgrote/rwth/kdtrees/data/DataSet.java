@@ -1,20 +1,22 @@
 package de.laurenzgrote.rwth.kdtrees.data;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
- * DataSet. Immutable set of data points of the same dimension.
- * The List of Pointers is ordered by the nth dimension.
+ * DateSet
  */
 public class DataSet {
     private int dim;
     private int length;
-    private List<DataPoint>[] set;
+
+    private HashSet<DataPoint> set;
 
     /**
      * Initialises a set of Data Points (e.g. from input). Set can not be altered.
-     * Set is sorted against all features upon initialization
-     * @param set List of points constituing the data set (unsorted)
+     * @param set List of points constituing the data set
      * @throws DataPointMalformatException if DataPoints are not sane
      */
     public DataSet(List<DataPoint> set) throws DataPointMalformattedException {
@@ -24,44 +26,37 @@ public class DataSet {
         for (DataPoint dPoint : set)
             if (dPoint.getDim() != dim)
                 throw new DataPointMalformattedException("Data Point has wrong dimension", dPoint);
-        this.set = new ArrayList[dim];
-        this.set[0] = set; // Save to first position
-        sort(); // Sort and copy
+        // set is sane
+        this.set = new HashSet<>(set);
     }
 
     /**
      * Creates a subset from the given set.
-     * The DataSet is assumed is assumed to be complete and sorted, thus a proteced method
+     * Set: ds / remove
+     * The DataSet is assumed is assumed to be complete and sorted, thus a proteced method.
+     * Only needed for the SortedDataSet implementation
      * @param ds     Original Dataset
      * @param remove Datapoints to be removed
      */
     protected DataSet (DataSet ds, List<DataPoint> remove) {
+        this.set = new HashSet<>(ds.set);
+        this.set.removeAll(remove);
+        this.length = set.size();
         this.dim = ds.getDim();
-        this.set = new ArrayList[dim];
-        for (int i = 0; i < dim; i++) {
-            this.set[i] = new ArrayList<>(ds.set[i]); // Copy value
-            this.set[i].removeAll(remove); // Remove items to be removed
-        }
-        this.length = this.set[0].size();
     }
 
-    /** 
-    * Creates sorted lists for each feature.
-    * Result: The nth element of the list contains all the dps sorted
-    * with respect to the nth feature
-    */
-    private void sort () {
-        // Now we sort all the arrays
-        for (int cDim = 0; cDim < dim; cDim++) {
-            // Comperator for the nth feature
-            DataPointComparator dPointComparator = new DataPointComparator(cDim);
-            if (cDim > 0) { // first is already present
-                // Copy the data
-                set[cDim] = new ArrayList<>(set[cDim-1]); // Copy constructor
-            }
-            // Sort by dim
-            set[cDim].sort(dPointComparator); // Quicksort
-        }
+    /**
+     * @return Dimension of the every data point
+     */
+    public int getDim() {
+        return dim;
+    }
+
+    /**
+     * @return number of vectors in the data set
+     */
+    public int getLength() {
+        return length;
     }
 
     /**
@@ -70,7 +65,7 @@ public class DataSet {
      */
     public double getAvg (int feature) {
         double avg = 0.0;
-        for (DataPoint d : set[0]) {
+        for (DataPoint d : set) {
             avg += d.getData(feature);
         }
         avg /= (double) length;
@@ -82,9 +77,11 @@ public class DataSet {
      * @return Median value in the set of the feature
      */
     public double getMean (int feature) {
-        // Arrays are sourted
+         // Set to array (sets cannot be sorted)
+        DataPoint[] array = set.toArray(new DataPoint[0]);
+        Arrays.sort(array, new DataPointComparator(feature));
         int mid = length / 2;
-        return set[feature].get(mid).getData(feature);
+        return array[mid].getData(feature);
     }
     
     /**
@@ -96,8 +93,8 @@ public class DataSet {
     public double getVariance (int feature) {
         double avg = getAvg(feature);
         double variance = 0.0;
-        for (int i = 0; i < dim; i++) {
-            double val = set[feature].get(i).getData(feature);
+        for (DataPoint d : set) {
+            double val = d.getData(feature);
             variance += Math.pow(val - avg,2);
         }
         variance /= (double) (length - 1);
@@ -114,32 +111,11 @@ public class DataSet {
     }
 
     /**
-     * @return Lists with the dps ordered by the nth feature
-     */
-    protected List<DataPoint>[] getSet () {
-        return set;
-    }
-
-    /**
      * @return DataPoints contained in the set
      */
-    public List<DataPoint> getDataPoints() {
+    public Set<DataPoint> getSet() {
         // All the lists contain the same data
         // so we can select one randomly
-        return set[0];
-    }
-
-    /**
-     * @return Dimension of the every data point
-     */
-    public int getDim() {
-        return dim;
-    }
-
-    /**
-     * @return number of vectors in the data set
-     */
-    public int getLength() {
-        return length;
+        return set;
     }
 }
