@@ -5,8 +5,8 @@ import java.util.*;
 /**
  * KDTreeNode. A node in a KD Tree, containing data points
  */
-public class KDTreeNode extends DataSet implements TreeNode{
-    private int minclustersize = 100; // TODO must be a calculated value
+public class KDTreeNode extends DataSet implements TreeNode {
+    private int minclustersize;
     private double tresh_maxdiff, tresh_variance;
     // Children containing the subsets
     private KDTreeNode left, right;
@@ -16,9 +16,10 @@ public class KDTreeNode extends DataSet implements TreeNode{
      * @param tresh_maxdiff Minimum difference for a maxdiff split
      * @param tresh_variance Minimum variance for a median variance split
      */
-    public KDTreeNode (List<DataPoint> set, double tresh_maxdiff, double tresh_variance) throws DataPointMalformattedException {
+    public KDTreeNode (List<DataPoint> set, double tresh_maxdiff, double tresh_variance, int minclustersize) throws DataPointMalformattedException {
         super(set);
         // Treshholds for splits
+        this.minclustersize = minclustersize;
         this.tresh_maxdiff = tresh_maxdiff;
         this.tresh_variance = tresh_variance;
         split(); // Split node, if possible
@@ -30,8 +31,10 @@ public class KDTreeNode extends DataSet implements TreeNode{
      * @param tresh_maxdiff Minimum difference for a maxdiff split
      * @param tresh_variance Minimum variance for a median variance split
      */
-    public KDTreeNode (DataSet set, List<DataPoint> remove, double tresh_maxdiff, double tresh_variance) {
+    public KDTreeNode (DataSet set, List<DataPoint> remove, double tresh_maxdiff, double tresh_variance, int minclustersize) {
         super(set, remove);
+        // Treshholds for splits
+        this.minclustersize = minclustersize;
         this.tresh_maxdiff = tresh_maxdiff;
         this.tresh_variance = tresh_variance;
         split(); // Split node, if possible
@@ -58,7 +61,7 @@ public class KDTreeNode extends DataSet implements TreeNode{
         int pivot = -1; // which element acts as pivot
         for (int feature = 0; feature < getDim(); feature++) { // for all features
             List<DataPoint> sortedList = getSet()[feature]; // DPs sorted by feature
-            for (int i = 0; i < getLength() - 1; i++) { // for all DPs
+            for (int i = minclustersize; i < getLength() - minclustersize; i++) { // for all DPs except outliers
                 // Calculate diff
                 double diff = sortedList.get(i+1).getData(feature) - sortedList.get(i).getData(feature);
                 if (diff > maxDiff) { // Compare if max
@@ -70,7 +73,7 @@ public class KDTreeNode extends DataSet implements TreeNode{
         }
         // Can a split be performed
         // Criteria A: greater than tresh; Criteria B: clusters will be large enough
-        if (maxDiff > tresh_maxdiff && pivot >= minclustersize && getLength() - pivot >= minclustersize) {
+        if (maxDiff > tresh_maxdiff) {
             // Yes --> Split by pivot
             splitByPivot(maxDiffFeature, pivot);
             return true;
@@ -115,9 +118,9 @@ public class KDTreeNode extends DataSet implements TreeNode{
         List<DataPoint> leq = getSet()[feature].subList(0, pivot + 1);
 
         // Left is leq pivot
-        left = new KDTreeNode(this, ge, tresh_maxdiff, tresh_variance);
+        left = new KDTreeNode(this, ge, tresh_maxdiff, tresh_variance, minclustersize);
         // Right is ge pivot
-        right = new KDTreeNode(this, leq, tresh_maxdiff, tresh_variance);
+        right = new KDTreeNode(this, leq, tresh_maxdiff, tresh_variance, minclustersize);
     }
 
     /**

@@ -3,7 +3,9 @@ package de.laurenzgrote.rwth.kdtrees;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
+import de.laurenzgrote.rwth.kdtrees.data.DataPoint;
 import de.laurenzgrote.rwth.kdtrees.data.DataPointMalformattedException;
 import de.laurenzgrote.rwth.kdtrees.data.KDTreeNode;
 import de.laurenzgrote.rwth.kdtrees.io.ClusterWriter;
@@ -14,7 +16,9 @@ public class Main {
     public static void main(String[] args) {
         Path path = Paths.get(args[0]);
         try {
-            KDTreeNode dSet = new KDTreeNode(DataSetFactory.readFromDenseMatrix(path), 0.001, 0.0001);
+            List<DataPoint> dPoints = DataSetFactory.readFromDenseMatrix(path);
+            int minclustersize =  (int) Math.ceil(0.05 * dPoints.size());
+            KDTreeNode dSet = new KDTreeNode(dPoints, 0.00001, 0.00006, minclustersize);
             for (int i = 0; i < dSet.getDim(); i++) {
                 double avg = dSet.getAvg(i);
                 double mean = dSet.getMean(i);
