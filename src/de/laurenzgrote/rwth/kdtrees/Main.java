@@ -13,12 +13,19 @@ import de.laurenzgrote.rwth.kdtrees.io.DataSetFactory;
 import de.laurenzgrote.rwth.kdtrees.io.FileMalformattedException;
 
 public class Main {
+
+    // This is a "magic number"
+    // I did not make it a parameter bcause 5% proved good
+    // and is also proposed in the original paper
+    private static double mincluster = 0.05;
     public static void main(String[] args) {
         Path path = Paths.get(args[0]);
+        double tresh_maxdiff = Double.parseDouble(args[1]);
+        double tresh_variance = Double.parseDouble(args[2]);
         try {
             List<DataPoint> dPoints = DataSetFactory.readFromDenseMatrix(path);
-            int minclustersize =  (int) Math.ceil(0.05 * dPoints.size());
-            KDTreeNode dSet = new KDTreeNode(dPoints, 0.00001, 0.00006, minclustersize);
+            int minclustersize =  (int) Math.ceil(mincluster * dPoints.size());
+            KDTreeNode dSet = new KDTreeNode(dPoints, tresh_maxdiff, tresh_variance, minclustersize);
             for (int i = 0; i < dSet.getDim(); i++) {
                 double avg = dSet.getAvg(i);
                 double mean = dSet.getMean(i);
