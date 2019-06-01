@@ -1,6 +1,6 @@
 package de.laurenzgrote.rwth.kdtrees.data;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * TreeNode. Interface of an binary tree containing clusters.
@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface TreeNode {
     // List with all Data Points in Node
-    List<DataPoint> getDataPoints();
+    Set<DataPoint> getSet();
     // Children of current node
     TreeNode getLeft();
     TreeNode getRight();

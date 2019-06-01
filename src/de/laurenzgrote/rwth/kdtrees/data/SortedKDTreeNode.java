@@ -5,18 +5,18 @@ import java.util.*;
 /**
  * KDTreeNode. A node in a KD Tree, containing data points
  */
-public class KDTreeNode extends DataSet implements TreeNode {
+public class SortedKDTreeNode extends SortedDataSet implements TreeNode {
     private int minclustersize;
     private double tresh_maxdiff, tresh_variance;
     // Children containing the subsets
-    private KDTreeNode left, right;
+    private SortedKDTreeNode left, right;
 
     /**
      * Constructs KDTreeNode from List of DataPoints
      * @param tresh_maxdiff Minimum difference for a maxdiff split
      * @param tresh_variance Minimum variance for a median variance split
      */
-    public KDTreeNode (List<DataPoint> set, double tresh_maxdiff, double tresh_variance, int minclustersize) throws DataPointMalformattedException {
+    public SortedKDTreeNode (List<DataPoint> set, double tresh_maxdiff, double tresh_variance, int minclustersize) throws DataPointMalformattedException {
         super(set);
         // Treshholds for splits
         this.minclustersize = minclustersize;
@@ -31,7 +31,7 @@ public class KDTreeNode extends DataSet implements TreeNode {
      * @param tresh_maxdiff Minimum difference for a maxdiff split
      * @param tresh_variance Minimum variance for a median variance split
      */
-    public KDTreeNode (DataSet set, List<DataPoint> remove, double tresh_maxdiff, double tresh_variance, int minclustersize) {
+    public SortedKDTreeNode (SortedDataSet set, List<DataPoint> remove, double tresh_maxdiff, double tresh_variance, int minclustersize) {
         super(set, remove);
         // Treshholds for splits
         this.minclustersize = minclustersize;
@@ -60,7 +60,7 @@ public class KDTreeNode extends DataSet implements TreeNode {
         int maxDiffFeature = -1; // in which feature
         int pivot = -1; // which element acts as pivot
         for (int feature = 0; feature < getDim(); feature++) { // for all features
-            List<DataPoint> sortedList = getSet()[feature]; // DPs sorted by feature
+            List<DataPoint> sortedList = getSortedSet()[feature]; // DPs sorted by feature
             for (int i = minclustersize; i < getLength() - minclustersize; i++) { // for all DPs except outliers
                 // Calculate diff
                 double diff = sortedList.get(i+1).getData(feature) - sortedList.get(i).getData(feature);
@@ -114,26 +114,26 @@ public class KDTreeNode extends DataSet implements TreeNode {
     private void splitByPivot(int feature, int pivot) {
         // Lists of ge and leq elements
         // BE AWARE: FROM is inclusive, TO is exclusive
-        List<DataPoint> ge = getSet()[feature].subList(pivot + 1, getLength());
-        List<DataPoint> leq = getSet()[feature].subList(0, pivot + 1);
+        List<DataPoint> ge = getSortedSet()[feature].subList(pivot + 1, getLength());
+        List<DataPoint> leq = getSortedSet()[feature].subList(0, pivot + 1);
 
         // Left is leq pivot
-        left = new KDTreeNode(this, ge, tresh_maxdiff, tresh_variance, minclustersize);
+        left = new SortedKDTreeNode(this, ge, tresh_maxdiff, tresh_variance, minclustersize);
         // Right is ge pivot
-        right = new KDTreeNode(this, leq, tresh_maxdiff, tresh_variance, minclustersize);
+        right = new SortedKDTreeNode(this, leq, tresh_maxdiff, tresh_variance, minclustersize);
     }
 
     /**
      * @return Left child
      */
-    public KDTreeNode getLeft() {
+    public SortedKDTreeNode getLeft() {
         return left;
     }
 
     /**
      * @return Right child
      */
-    public KDTreeNode getRight() {
+    public SortedKDTreeNode getRight() {
         return right;
     }
 }
