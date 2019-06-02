@@ -1,6 +1,7 @@
 package de.laurenzgrote.rwth.kdtrees.data;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -19,9 +20,9 @@ public class DataSet {
      * @param set List of points constituing the data set
      * @throws DataPointMalformatException if DataPoints are not sane
      */
-    public DataSet(List<DataPoint> set) throws DataPointMalformattedException {
+    public DataSet(Collection<DataPoint> set) throws DataPointMalformattedException {
         this.length = set.size();
-        this.dim = set.get(0).getDim();
+        this.dim = set.iterator().next().getDim();
         // All DPs must have same dim
         for (DataPoint dPoint : set)
             if (dPoint.getDim() != dim)
@@ -38,7 +39,7 @@ public class DataSet {
      * @param ds     Original Dataset
      * @param remove Datapoints to be removed
      */
-    protected DataSet (DataSet ds, List<DataPoint> remove) {
+    protected DataSet (DataSet ds, Collection<DataPoint> remove) {
         this.set = new HashSet<>(ds.set);
         this.set.removeAll(remove);
         this.length = set.size();
@@ -77,11 +78,41 @@ public class DataSet {
      * @return Median value in the set of the feature
      */
     public double getMean (int feature) {
-         // Set to array (sets cannot be sorted)
+        // Set to array (sets cannot be sorted)
         DataPoint[] array = set.toArray(new DataPoint[0]);
         Arrays.sort(array, new DataPointComparator(feature));
         int mid = length / 2;
         return array[mid].getData(feature);
+    }
+
+    /**
+     * @param feature Feature currently looked at
+     * @return Minimum value in the set of the feature
+     */
+    public double getMinimum (int feature) {
+        double minimum = 1; // normalized, highest possible
+        for (DataPoint dPoint : set) {
+            double val = dPoint.getData(feature);
+            if (val < minimum) {
+                minimum = val;
+            }
+        }
+        return minimum;
+    }
+
+    /**
+     * @param feature Feature currently looked at
+     * @return Maximum value in the set of the feature
+     */
+    public double getMaximum (int feature) {
+        double maximum = 0; // normalized, lowest possible
+        for (DataPoint dPoint : set) {
+            double val = dPoint.getData(feature);
+            if (val > maximum) {
+                maximum = val;
+            }
+        }
+        return maximum;
     }
     
     /**

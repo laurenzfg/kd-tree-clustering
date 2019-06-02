@@ -3,7 +3,7 @@ package de.laurenzgrote.rwth.kdtrees.data;
 import java.util.*;
 
 /**
- * KDTreeNode. A node in a KD Tree, containing data points
+ * SortedKDTreeNode. A node in a KD Tree, containing data points
  */
 public class SortedKDTreeNode extends SortedDataSet implements TreeNode {
     private int minclustersize;
@@ -47,7 +47,8 @@ public class SortedKDTreeNode extends SortedDataSet implements TreeNode {
         // First try to split by maxdiff,
         // if unsuccesful: Split by variance
         // Don't split if current cluster to small
-        if (getLength() > minclustersize && !split_maxdiff())
+        // Don't split if current cluster to small (Must be 2x Minsize)
+        if (getLength() > 2*minclustersize && !split_maxdiff())
             split_variance();
     }
 
