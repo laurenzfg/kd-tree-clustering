@@ -2,7 +2,6 @@ package de.laurenzgrote.rwth.kdtrees.data;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 
 /**
  * KDTreeNode. A node in a KD Tree, containing data points
