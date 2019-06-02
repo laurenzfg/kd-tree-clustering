@@ -3,11 +3,10 @@ package de.laurenzgrote.rwth.kdtrees.data;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
- * DateSet
+ * DataSet. Set of Data Points. Class supports different statistical queries.
  */
 public class DataSet {
     private int dim;
