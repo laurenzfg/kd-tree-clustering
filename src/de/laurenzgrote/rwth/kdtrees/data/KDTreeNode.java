@@ -18,11 +18,11 @@ public class KDTreeNode extends DataSet implements TreeNode {
      * @param tresh_maxdiff  Minimum difference for a maxdiff split
      * @param tresh_variance Minimum variance for a median variance split
      */
-    public KDTreeNode(Collection<DataPoint> set, double tresh_maxdiff, double tresh_variance, int minclustersize)
+    public KDTreeNode(Collection<DataPoint> set, double tresh_maxdiff, double tresh_variance)
             throws DataPointMalformattedException {
         super(set);
         // Treshholds for splits
-        this.minclustersize = minclustersize;
+        this.minclustersize = (int) mincluster * getLength();
         this.tresh_maxdiff = tresh_maxdiff;
         this.tresh_variance = tresh_variance;
         split(); // Split node, if possible
@@ -174,9 +174,9 @@ public class KDTreeNode extends DataSet implements TreeNode {
         }  
         try {
             // Left is leq pivot
-            left = new KDTreeNode(leq, tresh_maxdiff, tresh_variance, minclustersize);
+            left = new KDTreeNode(leq, tresh_maxdiff, tresh_variance);
             // Right is ge pivot
-            right = new KDTreeNode(ge, tresh_maxdiff, tresh_variance, minclustersize);
+            right = new KDTreeNode(ge, tresh_maxdiff, tresh_variance);
         } catch (DataPointMalformattedException e) {
             // This error cannot happen
             System.err.println("Unspecified condition: Set not sane anymore");

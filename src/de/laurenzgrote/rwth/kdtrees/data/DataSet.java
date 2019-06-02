@@ -9,6 +9,11 @@ import java.util.Set;
  * DataSet. Set of Data Points. Class supports different statistical queries.
  */
 public class DataSet {
+    // This is a "magic number"
+    // I did not make it a parameter bcause 5% proved good
+    // and is also proposed in the original paper
+    protected static double mincluster = 0.05;
+
     private int dim;
     private int length;
 
