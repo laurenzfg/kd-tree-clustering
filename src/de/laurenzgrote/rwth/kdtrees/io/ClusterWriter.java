@@ -19,10 +19,16 @@ public abstract class ClusterWriter {
 
     /**
      * Writes clustering data to gnuplot compatible data
+     * 
      * @param tNode Root node
-     * @param path Output path
+     * @param path  Output path
+     * @throws FileMalformattedException
      */
-    public static void writeToGnuplot(TreeNode tNode, Path path) {
+    public static void writeToGnuplot(TreeNode tNode, Path path) throws FileMalformattedException {
+        // Only applicable to 2D data
+        if (tNode.getDim() != 2)
+            throw new FileMalformattedException(path, "Can't write Dataset as dim not equal 2");
+
         StringBuilder outString = new StringBuilder(); // Output buffer
 
         // First we make an ArrayList of just the leaf nodes
