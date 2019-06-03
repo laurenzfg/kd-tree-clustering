@@ -14,4 +14,14 @@ public interface TreeNode {
     // Children of current node
     TreeNode getLeft();
     TreeNode getRight();
+
+    // Summary statistics
+    int getDim();
+    int getLength();
+    double getAvg (int feature);
+    double getMean (int feature);
+    double getMinimum (int feature);
+    double getMaximum (int feature);
+    double getVariance (int feature);
+    double getStddev (int feature);
 }
