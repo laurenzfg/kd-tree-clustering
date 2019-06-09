@@ -7,7 +7,6 @@ import java.util.HashSet;
  * KDTreeNode. A node in a KD Tree, containing data points
  */
 public class KDTreeNode extends DataSet implements TreeNode {
-    private int minclustersize;
     private double tresh_maxdiff, tresh_variance;
     // Children containing the subsets
     private KDTreeNode left, right;
@@ -21,8 +20,6 @@ public class KDTreeNode extends DataSet implements TreeNode {
     public KDTreeNode(Collection<DataPoint> set, double tresh_maxdiff, double tresh_variance)
             throws DataPointMalformattedException {
         super(set);
-        // Treshholds for splits
-        this.minclustersize = (int) mincluster * getLength();
         this.tresh_maxdiff = tresh_maxdiff;
         this.tresh_variance = tresh_variance;
         split(); // Split node, if possible

@@ -6,7 +6,6 @@ import java.util.*;
  * SortedKDTreeNode. A node in a KD Tree, containing data points
  */
 public class SortedKDTreeNode extends SortedDataSet implements TreeNode {
-    private int minclustersize;
     private double tresh_maxdiff, tresh_variance;
     // Children containing the subsets
     private SortedKDTreeNode left, right;
@@ -18,8 +17,6 @@ public class SortedKDTreeNode extends SortedDataSet implements TreeNode {
      */
     public SortedKDTreeNode (List<DataPoint> set, double tresh_maxdiff, double tresh_variance) throws DataPointMalformattedException {
         super(set);
-        // Treshholds for splits
-        this.minclustersize = (int) mincluster * getLength();
         this.tresh_maxdiff = tresh_maxdiff;
         this.tresh_variance = tresh_variance;
         split(); // Split node, if possible
@@ -33,8 +30,6 @@ public class SortedKDTreeNode extends SortedDataSet implements TreeNode {
      */
     public SortedKDTreeNode (SortedDataSet set, List<DataPoint> remove, double tresh_maxdiff, double tresh_variance) {
         super(set, remove);
-        // Treshholds for splits
-        this.minclustersize = (int) mincluster * getLength();
         this.tresh_maxdiff = tresh_maxdiff;
         this.tresh_variance = tresh_variance;
         split(); // Split node, if possible

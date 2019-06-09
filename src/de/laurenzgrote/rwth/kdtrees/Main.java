@@ -8,6 +8,7 @@ import java.util.List;
 import de.laurenzgrote.rwth.kdtrees.data.DataPoint;
 import de.laurenzgrote.rwth.kdtrees.data.DataPointMalformattedException;
 import de.laurenzgrote.rwth.kdtrees.data.KDTreeNode;
+import de.laurenzgrote.rwth.kdtrees.data.SortedKDTreeNode;
 import de.laurenzgrote.rwth.kdtrees.data.TreeNode;
 import de.laurenzgrote.rwth.kdtrees.io.ClusterWriter;
 import de.laurenzgrote.rwth.kdtrees.io.DataSetFactory;
