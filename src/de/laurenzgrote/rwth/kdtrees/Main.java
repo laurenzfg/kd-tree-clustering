@@ -22,7 +22,7 @@ public class Main {
         try {
             List<DataPoint> dPoints = DataSetFactory.readFromDenseMatrix(path);
             TreeNode dSet = new KDTreeNode(dPoints, tresh_maxdiff, tresh_variance);
-            ClusterWriter.writeToGnuplot(dSet, Paths.get("out.dat"));
+            ClusterWriter.writeToGnuplot(dSet, Paths.get(args[3]));
         } catch (FileMalformattedException | DataPointMalformattedException | IOException e) {
             e.printStackTrace();
         }
