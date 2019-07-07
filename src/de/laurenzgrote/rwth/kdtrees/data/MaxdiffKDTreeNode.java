@@ -6,11 +6,10 @@ import java.util.HashSet;
 /**
  * KDTreeNode. A node in a KD Tree, containing data points
  */
-public class KDTreeNode extends DataSet implements TreeNode {
-    private int minclustersize;
+public class MaxdiffKDTreeNode extends DataSet implements TreeNode {
     private double tresh_maxdiff, tresh_variance;
     // Children containing the subsets
-    private KDTreeNode left, right;
+    private MaxdiffKDTreeNode left, right;
 
     /**
      * Constructs KDTreeNode from List of DataPoints (used in initialization)
@@ -18,11 +17,9 @@ public class KDTreeNode extends DataSet implements TreeNode {
      * @param tresh_maxdiff  Minimum difference for a maxdiff split
      * @param tresh_variance Minimum variance for a median variance split
      */
-    public KDTreeNode(Collection<DataPoint> set, double tresh_maxdiff, double tresh_variance, int minclustersize)
+    public MaxdiffKDTreeNode(Collection<DataPoint> set, double tresh_maxdiff, double tresh_variance)
             throws DataPointMalformattedException {
         super(set);
-        // Treshholds for splits
-        this.minclustersize = minclustersize;
         this.tresh_maxdiff = tresh_maxdiff;
         this.tresh_variance = tresh_variance;
         split(); // Split node, if possible
@@ -174,9 +171,9 @@ public class KDTreeNode extends DataSet implements TreeNode {
         }  
         try {
             // Left is leq pivot
-            left = new KDTreeNode(leq, tresh_maxdiff, tresh_variance, minclustersize);
+            left = new MaxdiffKDTreeNode(leq, tresh_maxdiff, tresh_variance);
             // Right is ge pivot
-            right = new KDTreeNode(ge, tresh_maxdiff, tresh_variance, minclustersize);
+            right = new MaxdiffKDTreeNode(ge, tresh_maxdiff, tresh_variance);
         } catch (DataPointMalformattedException e) {
             // This error cannot happen
             System.err.println("Unspecified condition: Set not sane anymore");
@@ -190,14 +187,14 @@ public class KDTreeNode extends DataSet implements TreeNode {
     /**
      * @return Left child
      */
-    public KDTreeNode getLeft() {
+    public MaxdiffKDTreeNode getLeft() {
         return left;
     }
 
     /**
      * @return Right child
      */
-    public KDTreeNode getRight() {
+    public MaxdiffKDTreeNode getRight() {
         return right;
     }
 }

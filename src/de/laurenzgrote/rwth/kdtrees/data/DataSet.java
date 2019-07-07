@@ -9,6 +9,12 @@ import java.util.Set;
  * DataSet. Set of Data Points. Class supports different statistical queries.
  */
 public class DataSet {
+    // This is a "magic number"
+    // I did not make it a parameter bcause 5% proved good
+    // and is also proposed in the original paper
+    private static double mincluster = 0.05;
+    protected int minclustersize;
+
     private int dim;
     private int length;
 
@@ -28,6 +34,8 @@ public class DataSet {
                 throw new DataPointMalformattedException("Data Point has wrong dimension", dPoint);
         // set is sane
         this.set = new HashSet<>(set);
+        // Treshholds for splits
+        this.minclustersize = (int) (mincluster * getLength());
     }
 
     /**
@@ -43,6 +51,8 @@ public class DataSet {
         this.set.removeAll(remove);
         this.length = set.size();
         this.dim = ds.getDim();
+        // Treshholds for splits
+        this.minclustersize = (int) (mincluster * getLength());
     }
 
     /**

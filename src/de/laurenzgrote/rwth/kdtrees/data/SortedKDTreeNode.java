@@ -6,7 +6,6 @@ import java.util.*;
  * SortedKDTreeNode. A node in a KD Tree, containing data points
  */
 public class SortedKDTreeNode extends SortedDataSet implements TreeNode {
-    private int minclustersize;
     private double tresh_maxdiff, tresh_variance;
     // Children containing the subsets
     private SortedKDTreeNode left, right;
@@ -16,10 +15,8 @@ public class SortedKDTreeNode extends SortedDataSet implements TreeNode {
      * @param tresh_maxdiff Minimum difference for a maxdiff split
      * @param tresh_variance Minimum variance for a median variance split
      */
-    public SortedKDTreeNode (List<DataPoint> set, double tresh_maxdiff, double tresh_variance, int minclustersize) throws DataPointMalformattedException {
+    public SortedKDTreeNode (List<DataPoint> set, double tresh_maxdiff, double tresh_variance) throws DataPointMalformattedException {
         super(set);
-        // Treshholds for splits
-        this.minclustersize = minclustersize;
         this.tresh_maxdiff = tresh_maxdiff;
         this.tresh_variance = tresh_variance;
         split(); // Split node, if possible
@@ -31,10 +28,8 @@ public class SortedKDTreeNode extends SortedDataSet implements TreeNode {
      * @param tresh_maxdiff Minimum difference for a maxdiff split
      * @param tresh_variance Minimum variance for a median variance split
      */
-    public SortedKDTreeNode (SortedDataSet set, List<DataPoint> remove, double tresh_maxdiff, double tresh_variance, int minclustersize) {
+    public SortedKDTreeNode (SortedDataSet set, List<DataPoint> remove, double tresh_maxdiff, double tresh_variance) {
         super(set, remove);
-        // Treshholds for splits
-        this.minclustersize = minclustersize;
         this.tresh_maxdiff = tresh_maxdiff;
         this.tresh_variance = tresh_variance;
         split(); // Split node, if possible
@@ -119,9 +114,9 @@ public class SortedKDTreeNode extends SortedDataSet implements TreeNode {
         List<DataPoint> leq = getSortedSet()[feature].subList(0, pivot + 1);
 
         // Left is leq pivot
-        left = new SortedKDTreeNode(this, ge, tresh_maxdiff, tresh_variance, minclustersize);
+        left = new SortedKDTreeNode(this, ge, tresh_maxdiff, tresh_variance);
         // Right is ge pivot
-        right = new SortedKDTreeNode(this, leq, tresh_maxdiff, tresh_variance, minclustersize);
+        right = new SortedKDTreeNode(this, leq, tresh_maxdiff, tresh_variance);
     }
 
     /**
